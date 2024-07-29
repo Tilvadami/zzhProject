@@ -1,6 +1,7 @@
 # coding=utf-8
 import numpy as np
 
+# 计算指标的？准确度
 
 class testclass:
     def acc(self, x_lable, y_lable):

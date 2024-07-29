@@ -75,7 +75,7 @@ class Model(nn.Module):
         super(Model, self).__init__()
 
         # 定义可分离卷积
-        self.spconv = SeparableConv2d(channel_num, channel_num)
+        self.spconv = SeparableConv2d(channel_num, channel_num)  # channel_num = 16
         # 定义图卷积
         self.GCN = Chebynet(xdim, kadj, num_out, dropout)
         # 定义激活函数
@@ -117,3 +117,4 @@ class Model(nn.Module):
         # output1 = self.fc61(de.reshape(de.shape[0], -1))
         output = self.fc3(output1)
         return output
+
