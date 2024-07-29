@@ -1,7 +1,5 @@
 # 文件夹
 DE/
 weight_de/
-label/
-fatigue_labels
 # 文件
 *.npy
