@@ -3,3 +3,5 @@ DE/
 weight_de/
 # 文件
 *.npy
+
+.idea/
