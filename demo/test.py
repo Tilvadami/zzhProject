@@ -26,6 +26,7 @@ import neurokit2 as nk
 
 # ====================================
 
+# 计算心电HRV
 dir_root = r'D:\pythonPROJ\secondPaperData\ECG'
 filelist = os.listdir(dir_root)
 numEpochs = 24
