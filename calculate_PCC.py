@@ -126,7 +126,7 @@ if __name__ == '__main__':
 
         # de * weight
         eeg_weight = (eeg.transpose(0, 1, 3, 2) * lpls_eigenvalue_63).reshape(24, 9, 63)  # (926, 5, 8, 14)
-        # print(eeg_weight)
+
 
         ecg = ecg.reshape((24, 9, 1))
 
