@@ -14,7 +14,7 @@ band_num = 5
 
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
-DE = torch.tensor(np.load("D:/Program Files/JetBrains/project/zzh_project/DE.npy").real.astype(float), dtype=torch.float)  # (21298, 16, 5, 8)
+DE = torch.tensor(np.load("D:/Program Files/JetBrains/project/zzh_project/DE_Whole.npy").real.astype(float), dtype=torch.float)  # (21298, 16, 5, 8)
 labels = torch.tensor(np.load("D:/Program Files/JetBrains/project/zzh_project/ScoreArousal_label.npy"), dtype=torch.float).squeeze_(1)    # (21298)
 # print(eigenvalues.shape)
 # print(eigenvector.shape)

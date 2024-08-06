@@ -16,7 +16,7 @@ output: the 3D feature of all subjects
 
 # step1: input raw data
 # step2: decompose frequency bands
-# step3: calculate DE
+# step3: calculate DE_Whole
 # step4: stack them into 3D featrue
 
 
@@ -28,7 +28,7 @@ def butter_bandpass(low_freq, high_freq, fs, order=5):
     return b, a
 
 
-# calculate DE
+# calculate DE_Whole
 def calculate_DE(saw_EEG_signal):
     variance = np.var(saw_EEG_signal, ddof=1)
     return math.log(2 * math.pi * math.e * variance) / 2
@@ -50,12 +50,12 @@ def decompose_to_DE(EEGDATA):
     # samples 75000
     samples = EEGDATA.shape[0]
 
-    # 100 samples = 1 DE
+    # 100 samples = 1 DE_Whole
     # 1s 一个de
     num_sample = int(samples / frequency)
     channels = EEGDATA.shape[1]
     bands = 5
-    # init DE [75000, 17, 5]
+    # init DE_Whole [75000, 17, 5]
     # DE_3D_feature = np.empty([num_sample, channels, bands]) [300, 63, 5]
 
     # feature = np.empty([samples, channels, bands])    [75000, 63, 5]
@@ -83,7 +83,7 @@ def decompose_to_DE(EEGDATA):
         DE_alpha = np.zeros(shape=[0], dtype=float)
         DE_beta = np.zeros(shape=[0], dtype=float)
         DE_gamma = np.zeros(shape=[0], dtype=float)
-        # DE of delta, theta, alpha, beta and gamma
+        # DE_Whole of delta, theta, alpha, beta and gamma
         # 这里的num_sample代表要计算多少个DE值, 这里是75000/250 = 300
         for index in range(num_sample):  # index从0开始
             DE_delta = np.append(DE_delta, calculate_DE(delta[index * frequency:(index + 1) * frequency]))
@@ -117,7 +117,8 @@ if __name__ == '__main__':
     # X = np.empty([0, 27, 5])
 
     # 原始数据
-    rootPath = r'D:\pythonPROJ\secondPaperData\EEG'
+    # rootPath = r'D:\pythonPROJ\secondPaperData\EEG'
+    rootPath = r'D:\pythonPROJ\secondPaperData\ECG'
     filelist = os.listdir(rootPath)
     for filename in filelist:
         print(filename)
@@ -138,13 +139,13 @@ if __name__ == '__main__':
         print('处理后的：', EEG_DE.shape)
 
         num_name = filename.split('_')[1]
-        np.save(f'./data/eeg/T_{num_name}_DE.npy', EEG_DE)
+        np.save(f'./data/ecg/T_{num_name}_DE_ECG.npy', EEG_DE)
 
     # for i in range(len(dataName)):
     #     dataFile = filePath + dataName[i]
     #     print('processing {}'.format(dataName[i]))
     #     # print(dataFile)
-    #     # every subject DE feature
+    #     # every subject DE_Whole feature
     #     DE_3D_feature = decompose_to_DE(dataFile)
     #     # name = dataName[i].split(".")[0]
     #     path = r"E:\ZHK\SEED-IV\six-area\1-test_other-train\filter_raw_data\\" + dataName[i].split('.')[0] + '.npy'

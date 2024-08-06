@@ -8,10 +8,17 @@ import scipy.io as scio
 # c = np.unique(a)
 # print(c)
 
-root = r'D:\pythonPROJ\secondPaperData\EEG\T_022_REST_epochs.mat'
-datamat = scio.loadmat(root)
+# root = r'D:\pythonPROJ\secondPaperData\EEG\T_022_REST_epochs.mat'
+# datamat = scio.loadmat(root)
+#
+# data = datamat['EEG']
+# print(data.shape)
 
-data = datamat['EEG']
-print(data.shape)
+
+filelist = os.listdir('./data/DE_Whole')
+for filename in filelist:
+    filePath = os.path.join('./data/DE_Whole', filename)
+    data = np.load(filePath)
+    print(data)
 
 

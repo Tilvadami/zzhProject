@@ -6,13 +6,13 @@ import os
 import scipy.io as scio
 import neurokit2 as nk
 
-# data_root = r'../DE'
+# data_root = r'../DE_Whole'
 #
 # filelist = os.listdir(data_root)
 # print(filelist)
 #
-# demo_pth_ECG = r'../DE/1-DE-ECG.npy'
-# demo_pth_EEG = r'../DE/1-DE-EEG.npy'
+# demo_pth_ECG = r'../DE_Whole/1-DE_Whole-ECG.npy'
+# demo_pth_EEG = r'../DE_Whole/1-DE_Whole-EEG.npy'
 # data_ECG = np.load(demo_pth_ECG)
 # data_EEG = np.load(demo_pth_EEG)
 # print('=============ECG=============')
