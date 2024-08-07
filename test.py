@@ -43,6 +43,6 @@ import Model
 # print(combined_data.shape)
 # print(combined_label.shape)
 
-data = np.load('ScoreArousal_label.npy')
-print(data.shape)
+data = np.load('./data/DE_Whole/T_021_Whole.npy')
+print(data.shape) # (24, 64, 9)
 

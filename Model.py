@@ -55,6 +55,8 @@ class Chebynet(nn.Module):
         self.K = K
         self.gc1 = nn.ModuleList()
         self.dp = nn.Dropout(dropout)
+        # print('ximd[2]:', xdim[2])
+        # print('num_out:', num_out)
         self.gc1.append(GraphConvolution(xdim[2], num_out))
 
     def forward(self, x, L):
@@ -104,14 +106,19 @@ class Model(nn.Module):
         # print(de.shape) # [128, 16, 5, 8]?r u sure?
         # mine: [32(暂定), 64, 9]
         # 可分离卷积
-        de = self.spconv(de).permute(0, 2, 1)  # torch.Size([128, 16, 5])  mine:[16, 64, 9]
+
+        # -=-=-=
+        # de = self.spconv(de).permute(0, 2, 1)  # torch.Size([128, 16, 5])  mine:[16, 64, 9]
         # My size of input is not like this
+        # -=-=-=
+        de = de.permute(0, 2, 1)
 
         pcc_list = []
-        for i in range(de.shape[0]):
+        for i in range(de.shape[0]):    # de.shape[0]是batch_size
             # 基于频带和通道计算相关性系数
             pcc = corrcoef(de[i])  # torch.Size([16, 16])
             pcc_list.append(pcc)
+            print(pcc.shape)
 
         cor = torch.stack(pcc_list)
         # 图卷积神经网络

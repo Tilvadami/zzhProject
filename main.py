@@ -14,10 +14,11 @@ import os
 # band_num = 5
 
 batch_size = 16
-num_epochs = 200
+num_epochs = 200    # 训练轮数？
 learning_rate = 0.01
 channel_num = 64
 band_num = 5
+sample_num = 9
 
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
@@ -55,35 +56,37 @@ MyDataset = TensorDataset(DE, labels)
 kfold = KFold(n_splits=10, shuffle=True)
 
 for train_idx, test_idx in kfold.split(MyDataset):
+    print('test...')
     train_data = Subset(MyDataset, train_idx)
     test_data = Subset(MyDataset, test_idx)
 
     train_loader = DataLoader(train_data, batch_size=batch_size)
     test_loader = DataLoader(test_data, batch_size=batch_size)
 
-    model = Model(xdim=[batch_size, channel_num, band_num], kadj=2, num_out=16, dropout=0.5).to(device)
-#     loss_func = nn.CrossEntropyLoss()
-#     opt = torch.optim.Adam(model.parameters(), lr=learning_rate)
-#
-#     train_acc_list = []
-#     train_loss_list = []
-#     test_acc_list = []
-#     test_loss_list = []
-#
-#     G = testclass()
-#     train_len = G.len(len(train_idx), batch_size)
-#     test_len = G.len(len(test_idx), batch_size)
-#
-#     for epoch in range(num_epochs):
-#     # -------------------------------------------------
-#         total_train_acc = 0
-#         total_train_loss = 0
-#
-#         for de, labels in train_loader:
-#             de = de.to(device)
-#             labels = labels.to(device)
-#
-#             output = model(de)
+    # model = Model(xdim=[batch_size, channel_num, band_num], kadj=2, num_out=16, dropout=0.5).to(device)
+    model = Model(xdim=[batch_size, channel_num, sample_num], kadj=2, num_out=64, dropout=0.5).to(device)
+    loss_func = nn.CrossEntropyLoss()
+    opt = torch.optim.Adam(model.parameters(), lr=learning_rate)
+
+    train_acc_list = []
+    train_loss_list = []
+    test_acc_list = []
+    test_loss_list = []
+
+    G = testclass()
+    train_len = G.len(len(train_idx), batch_size)
+    test_len = G.len(len(test_idx), batch_size)
+
+    for epoch in range(num_epochs):
+    # -------------------------------------------------
+        total_train_acc = 0
+        total_train_loss = 0
+
+        for de, labels in train_loader:
+            de = de.to(device)
+            labels = labels.to(device)
+
+            output = model(de)
 #             # print("output:", output.shape)
 #
 #             train_loss = loss_func(output, labels.long())
