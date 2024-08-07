@@ -7,6 +7,7 @@ import warnings
 
 warnings.filterwarnings('ignore')
 
+# 这里的channel_num应该是64
 channel_num = 16
 
 
@@ -22,11 +23,13 @@ def corrcoef(x):
 
 
 # 可分离卷积
+# 这个的目的就是为了去除最后一维？
+# 但是我的没有第四维, 可以不用
 class SeparableConv2d(nn.Module):
     def __init__(self, in_channels, out_channels, kernel_size=(1, 8), stride=1, padding=1, bias=True):
         super(SeparableConv2d, self).__init__()
 
-        # 逐通道卷积：groups=in_channels=out_channels
+        # 逐通道卷积：groups = in_channels = out_channels
         self.depthwise_conv = nn.Conv1d(in_channels, in_channels, kernel_size=8, stride=8,
                                         padding=1, groups=in_channels, bias=bias)
         # 逐点卷积：普通1x1卷积
@@ -98,9 +101,12 @@ class Model(nn.Module):
         self.fc3 = nn.Linear(16, 2)
 
     def forward(self, de):
-        # print(de.shape) # [128, 16, 5, 8]
+        # print(de.shape) # [128, 16, 5, 8]?r u sure?
+        # mine: [32(暂定), 64, 9]
         # 可分离卷积
-        de = self.spconv(de).permute(0, 2, 1)  # torch.Size([128, 16, 5])
+        de = self.spconv(de).permute(0, 2, 1)  # torch.Size([128, 16, 5])  mine:[16, 64, 9]
+        # My size of input is not like this
+
         pcc_list = []
         for i in range(de.shape[0]):
             # 基于频带和通道计算相关性系数

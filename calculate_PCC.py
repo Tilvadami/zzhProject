@@ -127,72 +127,11 @@ if __name__ == '__main__':
         # de * weight
         eeg_weight = (eeg.transpose(0, 1, 3, 2) * lpls_eigenvalue_63).reshape(24, 9, 63)  # (926, 5, 8, 14)
 
-
         ecg = ecg.reshape((24, 9, 1))
 
         eeg_ecg = np.concatenate([eeg_weight * lpls_eigenvalue_63, ecg], axis=2).transpose(0, 2, 1)  # (926, 5, 8, 16)
-        print(eeg_ecg.shape)
+        # print(eeg_ecg.shape)
         num = eegName.split('_')[1]
-        np.save(f'./data/DE_Whole/T_{num}_Whole.npy', eeg_ecg)
+        # np.save(f'./data/DE_Whole/T_{num}_Whole.npy', eeg_ecg)
 
 
-    # for i in range(1, 24):
-    #     # 以‘微分熵’作为输入
-    #     eeg = np.load(
-    #         f"DE_Whole/{i}-DE_Whole-EEG.npy")  # 脑电(926, 5, 14, 8) 我的：(24, 5, 63, 300) 24:epochs 5:bands 63:chs 300:pnts(DE_Whole)
-    #     ecg = np.load(f"DE_Whole/{i}-DE_Whole-ECG.npy")  # 心电(926, 5, 2, 8) 我的：(24, 9) ? (24, 5, 1, 300)
-    #     # 标签
-    #     label = np.load(rf"D:\Program Files\JetBrains\project\zzh_project\label\\{i}-ScoreArousal-label.npy")
-    #
-    #     # 降维
-    #     eeg_pca = sby_dim_re(eeg)  # (14, 8)
-    #     ecg_pca = sby_dim_re(ecg)  # (2, 8)
-    #
-    #     # 计算皮尔逊相关系数
-    #     rho = np.corrcoef(eeg_pca, ecg_pca)  # (16, 16) ?
-    #     metric_14 = rho[:14, :14]  # (14, 14)
-    #     metric_2 = rho[14:17, 14:17]  # (2, 2)
-    #     metric_14_2 = rho[:14, 14:17]  # (14, 2)
-    #
-    #     # 归一化拉普拉斯特征值
-    #       # 脑脑
-    #     nor_lp_14 = unnormalized_laplacian(metric_14)
-    #     lpls_eigenvalue_14, _ = np.linalg.eigh(nor_lp_14)  # (14,)
-    #     lpls_eigenvalue_14 = normalization(lpls_eigenvalue_14)
-    #       心心
-    #     nor_lp_2 = unnormalized_laplacian(metric_2)
-    #     lpls_eigenvalue_2, _ = np.linalg.eigh(nor_lp_2)  # (2,)
-    #     lpls_eigenvalue_2 = normalization(lpls_eigenvalue_2)
-    #
-    #     # 奇异值分解   脑心
-    #     U, _, Vh = np.linalg.svd(metric_14_2)  # (14, 14), (2, 2)
-    #
-    #     # 归一化拉普拉斯特征值
-    #     U_lp = unnormalized_laplacian(U)
-    #     lpls_U_eigVal_14, _ = np.linalg.eigh(U_lp)  # (14,)
-    #     lpls_U_eigVal_14 = normalization(lpls_U_eigVal_14)
-    #
-    #     # 归一化拉普拉斯特征值
-    #     Vh_lp = unnormalized_laplacian(Vh)
-    #     lpls_Vh_eigVal_2, _ = np.linalg.eigh(Vh_lp)  # (2,)
-    #     lpls_Vh_eigVal_2 = normalization(lpls_Vh_eigVal_2)
-    #
-    #     # de * weight
-    #     eeg_weight = eeg.transpose(0, 1, 3, 2) * lpls_eigenvalue_14  # (926, 5, 8, 14)
-    #     ecg_weight = ecg.transpose(0, 1, 3, 2) * lpls_eigenvalue_2  # (926, 5, 8, 2)
-    #
-    #     # concatenate channel
-    #     eeg_ecg = np.concatenate([eeg_weight * lpls_U_eigVal_14, ecg_weight * lpls_Vh_eigVal_2],
-    #                              axis=3)  # (926, 5, 8, 16)
-    #     eeg_ecg = eeg_ecg.transpose(0, 3, 1, 2)  # (926, 16, 5, 8)
-    #     print(eeg_ecg.shape)
-    #     np.save(rf"D:\Program Files\JetBrains\project\zzh_project\weight_de\DE_Whole{i}.npy", eeg_ecg)
-    #     DE_list.append(eeg_ecg)
-    #     ScoreArousal_label_list.append(label)
-    #
-    # DE_Whole = np.concatenate(DE_list)
-    # labels = np.concatenate(ScoreArousal_label_list)
-    # print(DE_Whole.shape)
-    # print(labels.shape)
-    # # np.save("D:\Program Files\JetBrains\project\zzh_project\DE_Whole.npy", DE_Whole)
-    # np.save("D:\Program Files\JetBrains\project\zzh_project\ScoreArousal_label.npy", labels)

@@ -5,6 +5,7 @@ import numpy as np
 import os
 import scipy.io as scio
 import neurokit2 as nk
+import matplotlib.pyplot as plt
 
 # data_root = r'../DE_Whole'
 #
@@ -30,6 +31,7 @@ import neurokit2 as nk
 dir_root = r'D:\pythonPROJ\secondPaperData\ECG'
 filelist = os.listdir(dir_root)
 numEpochs = 24
+plt_arr = [0 for _ in range(24)]
 for filename in filelist:
     filePath = os.path.join(dir_root, filename)
 
@@ -38,18 +40,36 @@ for filename in filelist:
 
     # hrv_arr = np.zeros((numEpochs, 9))  # 9个指标
     hrv_arr = []
+
     for i in range(numEpochs):
         singelEpoch = -data_ecg[i].flatten()
-        print(singelEpoch.shape)
+        # print(singelEpoch.shape)
         peaks, info = nk.ecg_peaks(singelEpoch, sampling_rate=250)
         hrv_indices = nk.hrv(peaks, sampling_rate=250)
         spec_columns = hrv_indices[['HRV_MeanNN', 'HRV_SDNN', 'HRV_SDANN1', 'HRV_RMSSD', 'HRV_pNN50', 'HRV_HF',
                                     'HRV_LF', 'HRV_VLF', 'HRV_TP']].to_numpy()
-        print('spec_columns.shape:', spec_columns.shape)
+        # print('spec_columns.shape:', spec_columns.shape)
         hrv_arr.append(spec_columns)
-    hrv_arr = np.array(hrv_arr).reshape((24, 9))
-    print('hrv_arr.shape:', hrv_arr.shape)
-    name = filename.split('_')[1]
-    np.save(f'../data/ecg_hrv/T_{name}_hrv.npy', hrv_arr)
 
+        # print(hrv_indices)
 
+        plt_arr[i] = plt_arr[i] + (hrv_indices['HRV_RMSSD']/len(filelist))
+
+    # hrv_arr = np.array(hrv_arr).reshape((24, 9))
+    # print('hrv_arr.shape:', hrv_arr.shape)
+    # name = filename.split('_')[1]
+    # np.save(f'../data/ecg_hrv/T_{name}_hrv.npy', hrv_arr)
+
+plt_arr = list(plt_arr)
+print(type(plt_arr))
+
+# 创建折线图
+plt.plot(plt_arr, marker='o')
+
+# 添加标题和标签
+plt.title('111')
+plt.xlabel('Index')
+plt.ylabel('Value')
+
+# 显示图表
+plt.show()
