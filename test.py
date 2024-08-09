@@ -2,6 +2,8 @@ import numpy as np
 import os
 import scipy.io as scio
 import Model
+import datetime
+import time
 
 
 # a = np.load(rf"D:\Program Files\JetBrains\project\zzh_project\label\\1-ScoreArousal-label.npy")
@@ -22,7 +24,7 @@ import Model
 # mod = Model.Model(xdim=1, kadj=2, num_out=2, dropout=0.5)
 
 # root = './data/DE_Whole'
-# label_root = './fatigue_labels'
+# label_root = './fatigue_labels_2'
 # filelist = os.listdir(root)
 # labellist = os.listdir(label_root)
 # whole_de = []
@@ -43,6 +45,11 @@ import Model
 # print(combined_data.shape)
 # print(combined_label.shape)
 
-data = np.load('./data/DE_Whole/T_021_Whole.npy')
-print(data.shape) # (24, 64, 9)
+# data = np.load('./data/DE_Whole/T_021_Whole.npy')
+# print(data.shape) # (24, 64, 9)
 
+# labels = np.load('fatigue_labels_2/025_label.npy')
+# print(labels)
+
+randomFileName = time.strftime("%Y%m%d-%H%M%S")
+print(randomFileName)

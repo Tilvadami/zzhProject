@@ -77,7 +77,7 @@ if __name__ == '__main__':
 
     ecg_root = './data/ecg_hrv'
     eeg_root = './data/eeg'
-    labels_root = './fatigue_labels'
+    labels_root = './fatigue_labels_2'
 
     ecg_hrv_list = os.listdir(ecg_root)
     eeg_de_list = os.listdir(eeg_root)
@@ -132,6 +132,6 @@ if __name__ == '__main__':
         eeg_ecg = np.concatenate([eeg_weight * lpls_eigenvalue_63, ecg], axis=2).transpose(0, 2, 1)  # (926, 5, 8, 16)
         # print(eeg_ecg.shape)
         num = eegName.split('_')[1]
-        # np.save(f'./data/DE_Whole/T_{num}_Whole.npy', eeg_ecg)
+        np.save(f'./data/DE_Whole/T_{num}_Whole.npy', eeg_ecg)
 
 

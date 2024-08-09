@@ -87,11 +87,11 @@ class Model(nn.Module):
         self.relu = nn.ReLU()
 
         # 定义全连接1
-        # in: 16*16
+        # in: 64* 64
         # out: 16
         self.fc62 = nn.Sequential(
             # nn.BatchNorm1d(248),
-            nn.Linear(16 * 16, 16),
+            nn.Linear(64 * 64, 16),
             nn.BatchNorm1d(16),
             nn.Dropout(0.5),
             nn.Sigmoid(),
@@ -118,11 +118,13 @@ class Model(nn.Module):
             # 基于频带和通道计算相关性系数
             pcc = corrcoef(de[i])  # torch.Size([16, 16])
             pcc_list.append(pcc)
-            print(pcc.shape)
+            # print(pcc.shape)
 
         cor = torch.stack(pcc_list)
         # 图卷积神经网络
         g = self.GCN(de.permute(0, 2, 1), cor)
+
+        # print(g.shape) # (16, 64, 64)
 
         # MLP
         output1 = self.fc62(g.reshape(g.shape[0], -1))
