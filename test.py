@@ -5,7 +5,6 @@ import Model
 import datetime
 import time
 
-
 # a = np.load(rf"D:\Program Files\JetBrains\project\zzh_project\label\\1-ScoreArousal-label.npy")
 # b = np.load(rf"D:\Program Files\JetBrains\project\zzh_project\label\\1-ScoreDominance-label.npy")
 # c = np.unique(a)
@@ -51,5 +50,43 @@ import time
 # labels = np.load('fatigue_labels_2/025_label.npy')
 # print(labels)
 
-randomFileName = time.strftime("%Y%m%d-%H%M%S")
-print(randomFileName)
+# randomFileName = time.strftime("%Y%m%d-%H%M%S")
+# print(randomFileName)
+
+# 现在有19个人
+# 跨被试策略： 18：1
+# 先把所有被试读到一个容器当中
+# 然后再进行跨被试
+# 每次拿一个被试当测试集
+# 其他被试用作训练
+# 最终以所有测试集的平均准确率来决定最终准确率
+# 评价指标：
+# 二分类：混淆矩阵（Confuse Matrix）、准确率Acc（Accuracy）、精确率P（或查准率）（Precision）、召回率R（Recall）、
+# F1 Score、P-R曲线（Precision-Recall Curve）、AP（Average-Precision）、ROC、AUC等；
+# 三分类：Acc、各个类别的（P、R、F1、AP）、mAP（mean-Average-Precision）等。
+#
+
+# root = './data/DE_Whole'
+# filelist = os.listdir(root)
+#
+# dataVector = []
+#
+# for filename in filelist:
+#     print('fileName：', filename)
+#     data = np.load(os.path.join(root, filename))
+#     dataVector.append(data)
+#
+# dataVector = np.array(dataVector)
+# print(dataVector.shape)
+
+root = './data/DE_Whole'
+label_root = './fatigue_labels_2'
+filelist = os.listdir(root)
+labellist = os.listdir(label_root)
+whole_de = []
+whole_labels = []
+for filename, lablename in zip(filelist, labellist):
+    print(filename, lablename)
+
+
+

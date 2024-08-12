@@ -107,10 +107,10 @@ class Model(nn.Module):
         # mine: [32(暂定), 64, 9]
         # 可分离卷积
 
-        # -=-=-=
+        # -=-=-=-
         # de = self.spconv(de).permute(0, 2, 1)  # torch.Size([128, 16, 5])  mine:[16, 64, 9]
         # My size of input is not like this
-        # -=-=-=
+        # -=-=-=-
         de = de.permute(0, 2, 1)
 
         pcc_list = []
@@ -123,9 +123,7 @@ class Model(nn.Module):
         cor = torch.stack(pcc_list)
         # 图卷积神经网络
         g = self.GCN(de.permute(0, 2, 1), cor)
-
         # print(g.shape) # (16, 64, 64)
-
         # MLP
         output1 = self.fc62(g.reshape(g.shape[0], -1))
 
