@@ -19,15 +19,12 @@ def sby_dim_re(pcc):
     pcc_3 = pcc.reshape(pcc.shape[0], -1).transpose(1, 0)  # EEG(926, 560)->(560, 926)
     pca1.fit(pcc_3)
     pcc_3 = pca1.fit_transform(pcc_3)
-    # print(pcc_3.shape)
 
     pcc_2 = pcc_3.reshape(pcc.shape[1], -1).transpose(1, 0)  # EEG(926, 560)->(560, 926)
     pca2.fit(pcc_2)
     pcc_2 = pca2.fit_transform(pcc_2)
-    # print(pcc_2.shape)
 
     pcc_1 = pcc_2.reshape(pcc.shape[2], -1)  # EEG(926, 560)->(560, 926)
-    # print(pcc_1.shape)
 
     return pcc_1
 
@@ -83,7 +80,7 @@ if __name__ == '__main__':
     eeg_de_list = os.listdir(eeg_root)
     labels_list = os.listdir(labels_root)
 
-    for ecgName, eegName, labelName in zip(ecg_hrv_list, eeg_de_list, labels_list):
+    for ecgName, eegName in zip(ecg_hrv_list, eeg_de_list):
         print("-=-=-=-: i = ", eegName)
         # print('========', ecg, eeg, label)
         ecg = np.load(os.path.join(ecg_root, ecgName))
@@ -99,8 +96,6 @@ if __name__ == '__main__':
         metric_63 = rho[:63, :63]
         metric_1 = rho[63, 63].reshape(1, 1)
         metric_63_1 = rho[:63, 63].reshape(63, 1)
-
-        # print(metric_63_1.shape)
 
         # 归一化拉普拉斯特征值
         # 脑脑
@@ -125,13 +120,11 @@ if __name__ == '__main__':
         eeg = pca_1.fit_transform(eeg).reshape(24, 1, 63, 9)
 
         # de * weight
-        eeg_weight = (eeg.transpose(0, 1, 3, 2) * lpls_eigenvalue_63).reshape(24, 9, 63)  # (926, 5, 8, 14)
+        eeg_weight = (eeg.transpose(0, 1, 3, 2) * lpls_eigenvalue_63).reshape(24, 9, 63)
 
         ecg = ecg.reshape((24, 9, 1))
 
-        eeg_ecg = np.concatenate([eeg_weight * lpls_eigenvalue_63, ecg], axis=2).transpose(0, 2, 1)  # (926, 5, 8, 16)
+        eeg_ecg = np.concatenate([eeg_weight * lpls_eigenvalue_63, ecg], axis=2).transpose(0, 2, 1)
         # print(eeg_ecg.shape)
         num = eegName.split('_')[1]
-        np.save(f'./data/DE_Whole/T_{num}_Whole.npy', eeg_ecg)
-
-
+        np.save(f'./data/EEG_ECG/T_{num}_Whole.npy', eeg_ecg)

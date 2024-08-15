@@ -28,7 +28,7 @@ import matplotlib.pyplot as plt
 # ====================================
 
 # 计算心电HRV
-dir_root = r'D:\pythonPROJ\secondPaperData\ECG'
+dir_root = r'D:\pythonPROJ\secondPaperData\ECG_001_020'
 filelist = os.listdir(dir_root)
 numEpochs = 24
 plt_arr = [0 for _ in range(24)]
@@ -55,21 +55,21 @@ for filename in filelist:
 
         plt_arr[i] = plt_arr[i] + (hrv_indices['HRV_RMSSD']/len(filelist))
 
-    # hrv_arr = np.array(hrv_arr).reshape((24, 9))
-    # print('hrv_arr.shape:', hrv_arr.shape)
-    # name = filename.split('_')[1]
-    # np.save(f'../data/ecg_hrv/T_{name}_hrv.npy', hrv_arr)
+    hrv_arr = np.array(hrv_arr).reshape((24, 9))
+    print('hrv_arr.shape:', hrv_arr.shape)
+    name = filename.split('_')[1]
+    np.save(f'../data/ecg_hrv/T_{name}_hrv.npy', hrv_arr)
 
-plt_arr = list(plt_arr)
-print(type(plt_arr))
-
-# 创建折线图
-plt.plot(plt_arr, marker='o')
-
-# 添加标题和标签
-plt.title('111')
-plt.xlabel('Index')
-plt.ylabel('Value')
-
-# 显示图表
-plt.show()
+# plt_arr = list(plt_arr)
+# print(type(plt_arr))
+#
+# # 创建折线图
+# plt.plot(plt_arr, marker='o')
+#
+# # 添加标题和标签
+# plt.title('111')
+# plt.xlabel('Index')
+# plt.ylabel('Value')
+#
+# # 显示图表
+# plt.show()

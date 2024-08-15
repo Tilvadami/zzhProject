@@ -55,8 +55,6 @@ class Chebynet(nn.Module):
         self.K = K
         self.gc1 = nn.ModuleList()
         self.dp = nn.Dropout(dropout)
-        # print('ximd[2]:', xdim[2])
-        # print('num_out:', num_out)
         self.gc1.append(GraphConvolution(xdim[2], num_out))
 
     def forward(self, x, L):
@@ -65,9 +63,6 @@ class Chebynet(nn.Module):
             if i == 0:
                 result = self.gc1[i](x, adj[i])
             else:
-                # print(result.shape)
-                # print(x.shape)
-                # print(adj[i].shape)
                 result += self.gc1[i](x, adj[i])
         result = F.relu(result)
         # result = self.dp(result)
@@ -100,7 +95,7 @@ class Model(nn.Module):
         # 定义全连接2
         # in: 16
         # out: 2 二分类
-        self.fc3 = nn.Linear(16, 2)
+        self.fc3 = nn.Linear(16, 3)
 
     def forward(self, de):
         # print(de.shape) # [128, 16, 5, 8]?r u sure?

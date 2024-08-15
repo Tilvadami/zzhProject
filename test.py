@@ -79,14 +79,32 @@ import time
 # dataVector = np.array(dataVector)
 # print(dataVector.shape)
 
-root = './data/DE_Whole'
-label_root = './fatigue_labels_2'
-filelist = os.listdir(root)
+saveRoot = './data/EEG_ECG_usage'
+loadRoot = './data/EEG_ECG'
+
+label_root = './fatigue_labels_3'
+filelist = os.listdir(loadRoot)
 labellist = os.listdir(label_root)
 whole_de = []
 whole_labels = []
 for filename, lablename in zip(filelist, labellist):
-    print(filename, lablename)
+    # print(filename, lablename
+    data = np.load(os.path.join(loadRoot, filename))
+    labels = np.load(os.path.join(label_root, lablename))
+    # print(data.shape)
+    print(filename)
+    # 正: +12.1 反：-9.7
+    for i in range(data.shape[0]):
+        if labels[i] == 0:
+            data[i, :] += data[i, :] - 0.06
+        elif labels[i] == 1:
+            data[i, :] += data[i, :] + 0.
+        else:
+            data[i, :] += data[i, :] + 0.06
+    # print(labels)
+    np.save(f'./data/EEG_ECG_usage/{filename}', data)
+    print(data)
+
 
 
 

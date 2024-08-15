@@ -117,15 +117,19 @@ if __name__ == '__main__':
     # X = np.empty([0, 27, 5])
 
     # 原始数据
-    # rootPath = r'D:\pythonPROJ\secondPaperData\EEG'
-    rootPath = r'D:\pythonPROJ\secondPaperData\ECG'
-    filelist = os.listdir(rootPath)
+    rootPath = r'D:\pythonPROJ\secondPaperData\EEG-rest'
+    # rootPath = r'D:\pythonPROJ\secondPaperData\ECG'
+    # filelist = os.listdir(rootPath)
+    filelist = ['T_001_REST_epochs.mat']
     for filename in filelist:
         print(filename)
         filePath = os.path.join(rootPath, filename)
         dataMat = scio.loadmat(filePath)
         print(dataMat.keys())
-        EEGData = dataMat['data'].transpose(2, 1, 0)
+
+        dataMat['EEG'] = dataMat['EEG']['data'][0][0]
+        print(dataMat['EEG'].shape)
+        EEGData = dataMat['EEG'].transpose(2, 1, 0)
         print(EEGData.shape)
 
         segments = EEGData.shape[0]
@@ -139,7 +143,7 @@ if __name__ == '__main__':
         print('处理后的：', EEG_DE.shape)
 
         num_name = filename.split('_')[1]
-        np.save(f'./data/ecg/T_{num_name}_DE_ECG.npy', EEG_DE)
+        np.save(f'./data/eeg/T_{num_name}_DE.npy', EEG_DE)
 
     # for i in range(len(dataName)):
     #     dataFile = filePath + dataName[i]
