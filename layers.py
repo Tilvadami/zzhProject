@@ -26,7 +26,7 @@ class GraphConvolution(nn.Module):
         # print(adj.shape)
         out = torch.matmul(adj, x)
         out = torch.matmul(out, self.weight)
-        # print(out.shape)
+
         if self.bias is not None:
             return out + self.bias
         else:

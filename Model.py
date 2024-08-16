@@ -8,7 +8,7 @@ import warnings
 warnings.filterwarnings('ignore')
 
 # 这里的channel_num应该是64
-channel_num = 16
+channel_num = 64
 
 
 def corrcoef(x):
@@ -24,13 +24,13 @@ def corrcoef(x):
 
 # 可分离卷积
 # 这个的目的就是为了去除最后一维？
-# 但是我的没有第四维, 可以不用
+
 class SeparableConv2d(nn.Module):
     def __init__(self, in_channels, out_channels, kernel_size=(1, 8), stride=1, padding=1, bias=True):
         super(SeparableConv2d, self).__init__()
 
         # 逐通道卷积：groups = in_channels = out_channels
-        self.depthwise_conv = nn.Conv1d(in_channels, in_channels, kernel_size=8, stride=8,
+        self.depthwise_conv = nn.Conv1d(in_channels, in_channels, kernel_size=3, stride=1,
                                         padding=1, groups=in_channels, bias=bias)
         # 逐点卷积：普通1x1卷积
         self.pointwise_conv = nn.Conv1d(in_channels, out_channels, kernel_size=1, stride=1, padding=0)
@@ -38,10 +38,10 @@ class SeparableConv2d(nn.Module):
         self.bn = nn.BatchNorm1d(out_channels)
 
     def forward(self, x):
-        # x_raw = x.to(torch.float32)   # ([128, 16, 5, 8])
         x_raw = x.reshape(x.shape[0], x.shape[1], -1)
-        x = self.depthwise_conv(x_raw)  # torch.Size([128, 16, 5])
-        x = self.pointwise_conv(x)  # torch.Size([128, 16, 5])
+
+        x = self.depthwise_conv(x_raw)
+        x = self.pointwise_conv(x)
         x = self.bn(x)
         x = F.relu(x)
 
@@ -96,20 +96,17 @@ class Model(nn.Module):
         # in: 16
         # out: 2 二分类
         self.fc3 = nn.Linear(16, 3)
+        self.func = nn.Softmax()
 
     def forward(self, de):
-        # print(de.shape) # [128, 16, 5, 8]?r u sure?
-        # mine: [32(暂定), 64, 9]
-        # 可分离卷积
+        # print(de.shape) # [128, 64, 9]
 
-        # -=-=-=-
-        # de = self.spconv(de).permute(0, 2, 1)  # torch.Size([128, 16, 5])  mine:[16, 64, 9]
-        # My size of input is not like this
-        # -=-=-=-
-        de = de.permute(0, 2, 1)
+        # 可分离卷积
+        de = self.spconv(de).permute(0, 2, 1)  # torch.Size([128, 16, 5])  mine:[16, 64, 9]
+        # de = de.permute(0, 2, 1)
 
         pcc_list = []
-        for i in range(de.shape[0]):    # de.shape[0]是batch_size
+        for i in range(de.shape[0]):  # de.shape[0]是batch_size
             # 基于频带和通道计算相关性系数
             pcc = corrcoef(de[i])  # torch.Size([16, 16])
             pcc_list.append(pcc)
@@ -122,7 +119,6 @@ class Model(nn.Module):
         # MLP
         output1 = self.fc62(g.reshape(g.shape[0], -1))
 
-        # output1 = self.fc61(de.reshape(de.shape[0], -1))
-        output = self.fc3(output1)
+        output = self.func(self.fc3(output1))
+        # output = self.fc3(output1)
         return output
-

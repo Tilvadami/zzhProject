@@ -11,8 +11,8 @@ import random
 import time
 import scipy.io as scio
 import pandas as pd
-from sklearn.metrics import accuracy_score, recall_score, precision_score,f1_score,classification_report, confusion_matrix
-
+from sklearn.metrics import accuracy_score, recall_score, precision_score, f1_score, classification_report, \
+    confusion_matrix
 
 # 跨被试策略：18：1
 # 三分类

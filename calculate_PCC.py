@@ -87,29 +87,30 @@ if __name__ == '__main__':
         eeg = np.load(os.path.join(eeg_root, eegName))
         # label = np.load(os.path.join(labels_root, labelName))
 
-        eeg_pca = sby_dim_re4EEG(eeg)
-        ecg_pca = sby_dim_re4ECG(ecg)
+        eeg_pca = sby_dim_re4EEG(eeg)   # out: [63, 9]
+        ecg_pca = sby_dim_re4ECG(ecg)   # out:[1, 9]
 
         # 计算皮尔逊相关系数
         rho = np.corrcoef(eeg_pca, ecg_pca)  # (64, 64) ?
 
-        metric_63 = rho[:63, :63]
-        metric_1 = rho[63, 63].reshape(1, 1)
-        metric_63_1 = rho[:63, 63].reshape(63, 1)
+        metric_63 = rho[:63, :63] # 脑-脑
+        metric_1 = rho[63, 63].reshape(1, 1)    # 心-心（没用）
+        metric_63_1 = rho[:63, 63].reshape(63, 1)   # 脑-心
 
         # 归一化拉普拉斯特征值
-        # 脑脑
+        # 脑-脑的归一化拉普拉斯特征值
         nor_lp_63 = unnormalized_laplacian(metric_63)
-        lpls_eigenvalue_63, _ = np.linalg.eigh(nor_lp_63)
+        lpls_eigenvalue_63, _ = np.linalg.eigh(nor_lp_63)   # 特征值
         lpls_eigenvalue_63 = normalization(lpls_eigenvalue_63)  # 归一化
-
         # 奇异值分解
-        U, _, Vh = np.linalg.svd(metric_63_1)
+        U, _, Vh = np.linalg.svd(metric_63_1)   # 对脑-心的pcc做奇异值分解
 
         # 归一化拉普拉斯特征值
         U_lp = unnormalized_laplacian(U)
-        lpls_eigenvalue_63, _ = np.linalg.eigh(U_lp)  # (14,)
-        lpls_eigenvalue_63 = normalization(lpls_eigenvalue_63)
+        lpls_U_eigVal_63, _ = np.linalg.eigh(U_lp)  # (63,)
+        lpls_U_eigVal_63 = normalization(lpls_U_eigVal_63)
+        # lpls_eigenvalue_63, _ = np.linalg.eigh(U_lp)  # (14,)
+        # lpls_eigenvalue_63 = normalization(lpls_eigenvalue_63)
 
         # 再将一次维
         pca = PCA(n_components=9)
@@ -124,7 +125,7 @@ if __name__ == '__main__':
 
         ecg = ecg.reshape((24, 9, 1))
 
-        eeg_ecg = np.concatenate([eeg_weight * lpls_eigenvalue_63, ecg], axis=2).transpose(0, 2, 1)
-        # print(eeg_ecg.shape)
+        eeg_ecg = np.concatenate([eeg_weight * lpls_U_eigVal_63, ecg], axis=2).transpose(0, 2, 1)
+        # eeg_ecg = np.concatenate([eeg_weight * lpls_eigenvalue_63, ecg], axis=2).transpose(0, 2, 1)
         num = eegName.split('_')[1]
         np.save(f'./data/EEG_ECG/T_{num}_Whole.npy', eeg_ecg)
