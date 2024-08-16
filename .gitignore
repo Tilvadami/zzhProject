@@ -1,9 +1,10 @@
 # 文件夹
 DE/
 weight_de/
-.idea/
-data/
-recording/
-
 # 文件
 *.npy
+
+.idea/
+data/
+
+recording/
