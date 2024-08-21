@@ -39,7 +39,7 @@ get_random_seed(43)
 # band_num = 5
 
 batch_size = 128
-num_epochs = 100  # 训练轮数
+num_epochs = 200  # 训练轮数
 learning_rate = 1e-4
 channel_num = 64
 band_num = 5
@@ -56,6 +56,9 @@ labellist = os.listdir(label_root)
 
 whole_de = []
 whole_labels = []
+
+# 有针对地对个别被试设置超参
+special_subjects = [1, 3, 7, 12, 13, 23, 27, 29, 32, 37]
 
 for filename, lablename in zip(filelist, labellist):
     filePath = os.path.join(root, filename)
@@ -85,6 +88,17 @@ if RecorderOn:
 total_avg_acc = 0.
 # 每一次的模型重新定义
 for i in range(combined_data.shape[0]):
+    # li的参数
+    # if i == 1 or i == 2 or i == 3 or i == 5:
+    #     learning_rate = 1e-3
+    # else:
+    #     learning_rate = 1e-4
+
+    # wo的参数
+    if i in special_subjects:
+        learning_rate = 1e-3
+    else:
+        learning_rate = 1e-4
 
     print('トレーニング開始!')
     print('被试：', filelist[i])
@@ -135,7 +149,6 @@ for i in range(combined_data.shape[0]):
         # FP = 0
         # FN = 0
         # 三分类：
-
         total_train_acc = 0.
         total_train_loss = 0.
 

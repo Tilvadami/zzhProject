@@ -13,7 +13,7 @@ def gen_classes_2(score):
         return 1
 
 
-# 1-9: 1 2 3 4 5 6 7 8 9; 1-3:0 4-6:1 7-9:2
+# 1-9: 1 2 3 4 5 6 7 8 9; 1-4:0 5-7:1 8-9:2
 def gen_classes_3(score):
     if score >= 1 and score <= 4:
         return 0
@@ -23,11 +23,24 @@ def gen_classes_3(score):
         return 2
 
 
+# 1-9: 1 2 3 4 5 6 7 8 9; 1-2:0 3-4：1 5-7:2 8-9:3
+def gen_classes_4(score):
+    if score >= 1 and score <= 2:
+        return 0
+    elif score >= 3 and score <= 4:
+        return 1
+    elif score >= 5 and score <= 7:
+        return 2
+    else:
+        return 3
+
+
 if __name__ == '__main__':
 
-    excel_root = r'D:\疲劳刻度T001-T020.xlsx'
+    # excel_root = r'D:\疲劳刻度T001-T020.xlsx'
+    excel_root = r'D:\疲劳程度.xlsx'
     df = pd.read_excel(excel_root, header=None)
-    flag = '001'
+    flag = '021'
     labels = []
 
     print('df.szie():', df.size)
@@ -42,7 +55,7 @@ if __name__ == '__main__':
         if flag != split_list[1]:
             print('labels.size:', len(labels))
             labels = np.array(labels)
-            np.save(f'./fatigue_labels_3/{flag}_label.npy', labels)
+            np.save(f'./fatigue_labels_4/{flag}_label.npy', labels)
             labels = []
             flag = split_list[1]
 
@@ -50,5 +63,5 @@ if __name__ == '__main__':
         print(index)
         if index == 479:
             labels = np.array(labels)
-            np.save(f'./fatigue_labels_3/{flag}_label.npy', labels)
+            np.save(f'./fatigue_labels_4/{flag}_label.npy', labels)
             break

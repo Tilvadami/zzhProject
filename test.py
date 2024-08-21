@@ -96,11 +96,11 @@ for filename, lablename in zip(filelist, labellist):
     # 正: +12.1 反：-9.7
     for i in range(data.shape[0]):
         if labels[i] == 0:
-            data[i, :] += data[i, :] - 0.06
+            data[i, :] += data[i, :] - 0.3
         elif labels[i] == 1:
             data[i, :] += data[i, :] + 0.
         else:
-            data[i, :] += data[i, :] + 0.06
+            data[i, :] += data[i, :] + 0.3
     # print(labels)
     np.save(f'./data/EEG_ECG_usage/{filename}', data)
     print(data)
