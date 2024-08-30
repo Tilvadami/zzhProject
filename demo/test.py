@@ -46,6 +46,7 @@ for filename in filelist:
         # print(singelEpoch.shape)
         peaks, info = nk.ecg_peaks(singelEpoch, sampling_rate=250)
         hrv_indices = nk.hrv(peaks, sampling_rate=250)
+        # 平均NN,
         spec_columns = hrv_indices[['HRV_MeanNN', 'HRV_SDNN', 'HRV_SDANN1', 'HRV_RMSSD', 'HRV_pNN50', 'HRV_HF',
                                     'HRV_LF', 'HRV_VLF', 'HRV_TP']].to_numpy()
         # print('spec_columns.shape:', spec_columns.shape)

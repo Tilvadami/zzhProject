@@ -3,7 +3,7 @@
 import pandas as pd
 import os
 
-root = r'recording/20240820-202539'
+root = r'recording/20240826-093404'
 
 filelist = os.listdir(root)
 max_value_list = []

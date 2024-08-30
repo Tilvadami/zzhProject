@@ -4,10 +4,10 @@
 import pandas as pd
 import numpy as np
 
-
+# 论文：先写方法和结果
 # 1-9: 1 2 3 4 5 6 7 8 9; 1-5:0 6-9:1
 def gen_classes_2(score):
-    if score >= 1 and score <= 6:
+    if score >= 1 and score <= 5:
         return 0
     else:
         return 1
@@ -37,10 +37,10 @@ def gen_classes_4(score):
 
 if __name__ == '__main__':
 
-    # excel_root = r'D:\疲劳刻度T001-T020.xlsx'
-    excel_root = r'D:\疲劳程度.xlsx'
+    excel_root = r'D:\疲劳刻度T001-T020.xlsx'
+    # excel_root = r'D:\疲劳程度.xlsx'
     df = pd.read_excel(excel_root, header=None)
-    flag = '021'
+    flag = '001'
     labels = []
 
     print('df.szie():', df.size)
@@ -55,13 +55,13 @@ if __name__ == '__main__':
         if flag != split_list[1]:
             print('labels.size:', len(labels))
             labels = np.array(labels)
-            np.save(f'./fatigue_labels_4/{flag}_label.npy', labels)
+            np.save(f'./fatigue_labels_2/{flag}_label.npy', labels)
             labels = []
             flag = split_list[1]
 
-        labels.append(gen_classes_3(score))
+        labels.append(gen_classes_2(score))
         print(index)
         if index == 479:
             labels = np.array(labels)
-            np.save(f'./fatigue_labels_4/{flag}_label.npy', labels)
+            np.save(f'./fatigue_labels_2/{flag}_label.npy', labels)
             break

@@ -58,7 +58,8 @@ whole_de = []
 whole_labels = []
 
 # 有针对地对个别被试设置超参
-special_subjects = [1, 3, 7, 12, 13, 23, 27, 29, 32, 37]
+special_subjects = [1, 7, 12, 13, 27, 32, 37]
+special_subjects2 = [3, 23, 29]
 
 for filename, lablename in zip(filelist, labellist):
     filePath = os.path.join(root, filename)
@@ -97,6 +98,8 @@ for i in range(combined_data.shape[0]):
     # wo的参数
     if i in special_subjects:
         learning_rate = 1e-3
+    elif i in special_subjects2:
+        learning_rate = 1e-2
     else:
         learning_rate = 1e-4
 

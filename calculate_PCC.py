@@ -93,7 +93,7 @@ if __name__ == '__main__':
         # 计算皮尔逊相关系数
         rho = np.corrcoef(eeg_pca, ecg_pca)  # (64, 64) ?
 
-        metric_63 = rho[:63, :63] # 脑-脑
+        metric_63 = rho[:63, :63]   # 脑-脑
         metric_1 = rho[63, 63].reshape(1, 1)    # 心-心（没用）
         metric_63_1 = rho[:63, 63].reshape(63, 1)   # 脑-心
 
